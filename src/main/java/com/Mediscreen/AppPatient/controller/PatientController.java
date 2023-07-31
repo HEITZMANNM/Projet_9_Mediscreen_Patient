@@ -29,7 +29,7 @@ public class PatientController {
         return patientService.getPatientByFirstNameAndLastName(firstName, lastName);
     }
 
-    @PostMapping("/patient/saveNewPatient")
+    @PostMapping("/patient/add")
     //    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<HttpStatus> addPatient(@RequestBody PatientDTO patientDto) {
 
