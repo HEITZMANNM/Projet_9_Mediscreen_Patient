@@ -9,11 +9,11 @@ public interface PatientService {
 
      List<PatientDTO> getAllPatient();
 
-     PatientDTO getPatientByFirstNameAndLastName(String firstName, String lastName);
+     PatientDTO getPatientById(int id);
 
      void deletePatientByFirstNameAndLastName(String firstName, String lastName);
 
-     void upDatePatient(PatientDTO patient);
+     boolean upDatePatient(PatientDTO patient);
 
      boolean saveNewPatient(PatientDTO patient);
 }

@@ -10,27 +10,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class PatientController {
 
     @Autowired
     PatientService patientService;
 
     @GetMapping("/patient/all")
-//    @CrossOrigin(origins = "http://localhost:4200")
     public List<PatientDTO> getAllPatients()
     {
         return patientService.getAllPatient();
     }
 
     @GetMapping("/patient/identity")
-//    @CrossOrigin(origins = "http://localhost:4200")
-    public PatientDTO getPatientByFirstNameAndLastName(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName)
+    public PatientDTO getPatientByFirstNameAndLastName(@RequestParam(name = "id") int id)
     {
-        return patientService.getPatientByFirstNameAndLastName(firstName, lastName);
+        return patientService.getPatientById(id);
     }
 
     @PostMapping("/patient/add")
-    //    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<HttpStatus> addPatient(@RequestBody PatientDTO patientDto) {
 
         if(patientService.saveNewPatient(patientDto))
@@ -41,9 +39,18 @@ public class PatientController {
     }
 
     @DeleteMapping("/patient/delete")
-//    @CrossOrigin(origins = "http://localhost:4200")
     public void deletePatient(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName)
     {
         patientService.deletePatientByFirstNameAndLastName(firstName, lastName);
+    }
+
+    @PostMapping("/patient/upDate")
+    public ResponseEntity<HttpStatus> upDatePatient(@RequestBody PatientDTO patientDto) {
+
+        if(patientService.upDatePatient(patientDto))
+        {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

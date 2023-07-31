@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -54,7 +55,7 @@ public class PatientServiceTest {
         listOfallPatients.add(patient2);
 
         when(patientRepository.findAll()).thenReturn(listOfallPatients);
-        when(patientRepository.findPatientByFirstNameAndLastName(anyString(), anyString())).thenReturn(patient);
+        when(patientRepository.findPatientById(anyInt())).thenReturn(patient);
     }
 
     @Test
@@ -68,9 +69,9 @@ public class PatientServiceTest {
     }
 
     @Test
-    public void testToGetPatientByFirstNameAndLastName(){
+    public void testToGetPatientByFId(){
 
-        PatientDTO patient = patientService.getPatientByFirstNameAndLastName("test", "test");
+        PatientDTO patient = patientService.getPatientById(0);
 
         assertEquals(patient.getFirstName(), "TestFirstName");
         assertEquals(patient.getAddress(), "testAddress");

@@ -42,13 +42,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDTO getPatientByFirstNameAndLastName(String firstName, String lastName) {
+    public PatientDTO getPatientById(int id) {
 
         Patient patient = new Patient();
 
         try{
 
-            patient = patientRepository.findPatientByFirstNameAndLastName(firstName, lastName);
+            patient = patientRepository.findPatientById(id);
             log.info("The patient was find");
         }
         catch (Exception ex){
@@ -73,21 +73,24 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void upDatePatient(PatientDTO patient) {
+    public boolean upDatePatient(PatientDTO patient) {
 
+        boolean answer = false;
         try{
 
-            Patient patientExisting =  patientRepository.findPatientByFirstNameAndLastName(patient.getFirstName(), patient.getLastName());
+            Patient patientExisting =  patientRepository.findPatientById(patient.getId());
             patientExisting.setAddress(patient.getAddress());
             patientExisting.setPhoneNumber(patient.getPhoneNumber());
             patientExisting.setLastName(patient.getLastName());
 
             patientRepository.save(patientExisting);
+            answer = true;
             log.info("The patient was updated");
         }
         catch (Exception ex){
             log.error("Error to update patient");
         }
+        return answer;
 
     }
 
