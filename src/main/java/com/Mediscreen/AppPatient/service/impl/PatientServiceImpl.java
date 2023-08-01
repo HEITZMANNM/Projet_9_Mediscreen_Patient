@@ -58,12 +58,36 @@ public class PatientServiceImpl implements PatientService {
         return patientDTO;
     }
 
+    /*
+    * Methode which allowed to get a patient by first name and last name
+    * Only used for integration test
+    *
+    * param - firstName the patient FirstName
+    * param - lastName the patient LastName
+     */
+    @Override
+    public PatientDTO getPatientByFirstNameAndLastName(String firstName, String lastName){
+
+        Patient patient = new Patient();
+
+        try{
+
+            patient = patientRepository.findPatientByFirstNameAndLastName(firstName, lastName);
+            log.info("The patient was find");
+        }
+        catch (Exception ex){
+            log.error("Error to find patient");
+        }
+        PatientDTO patientDTO = patientDTOService.convertPatientToPatientDto(patient);
+        return patientDTO;
+    }
+
     @Override
     public void deletePatientByFirstNameAndLastName(String firstName, String lastName) {
 
         try{
 
-            patientRepository.deleteByFirstNameAndLastName(firstName, lastName);
+            patientRepository.deletePatientByFirstNameAndLastName(firstName, lastName);
             log.info("The patient was deleted");
         }
         catch (Exception ex){

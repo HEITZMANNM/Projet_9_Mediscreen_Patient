@@ -11,6 +11,8 @@ public interface PatientService {
 
      PatientDTO getPatientById(int id);
 
+     PatientDTO getPatientByFirstNameAndLastName(String firstName, String lastName);
+
      void deletePatientByFirstNameAndLastName(String firstName, String lastName);
 
      boolean upDatePatient(PatientDTO patient);

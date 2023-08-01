@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +35,6 @@ public class PatientControllerTest {
     {
         PatientDTO patient = new PatientDTO();
         patient.setPhoneNumber("555555");
-        patient.setId(0);
         patient.setBirthDate(new Date());
         patient.setGender("M");
         patient.setAddress("testAddress");
@@ -60,9 +60,21 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void testToGetPatientByIdentity() throws Exception {
+    public void testToGetPatientById() throws Exception {
 
-        this.mockMvc.perform(get("/patient/identity").param("firstName", "TestFirstName").param( "lastName", "TestLastName"))
+        PatientDTO patientDTO = new PatientDTO();
+
+        List<PatientDTO> listOfAllPatients = patientService.getAllPatient();
+
+        for(PatientDTO patientDTO1 : listOfAllPatients)
+        {
+            if(patientDTO1.getFirstName().equals("TestFirstName")){
+
+                patientDTO = patientDTO1;
+            }
+        }
+
+        this.mockMvc.perform(get("/patient/identity").param("id", String.valueOf(patientDTO.getId())))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("TestFirstName"));
     }
