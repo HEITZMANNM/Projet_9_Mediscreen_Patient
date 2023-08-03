@@ -83,11 +83,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void deletePatientByFirstNameAndLastName(String firstName, String lastName) {
+    public void delete(int id) {
 
         try{
 
-            patientRepository.deletePatientByFirstNameAndLastName(firstName, lastName);
+            patientRepository.deleteById(id);
             log.info("The patient was deleted");
         }
         catch (Exception ex){

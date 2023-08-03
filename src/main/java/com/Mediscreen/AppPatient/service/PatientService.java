@@ -13,7 +13,7 @@ public interface PatientService {
 
      PatientDTO getPatientByFirstNameAndLastName(String firstName, String lastName);
 
-     void deletePatientByFirstNameAndLastName(String firstName, String lastName);
+     void delete(int id);
 
      boolean upDatePatient(PatientDTO patient);
 

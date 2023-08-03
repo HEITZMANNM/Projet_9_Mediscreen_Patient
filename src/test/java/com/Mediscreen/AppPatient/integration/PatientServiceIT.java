@@ -37,7 +37,7 @@ public class PatientServiceIT {
         assertEquals(patient.getAddress(), patientDTOExpected.getAddress());
 
         //for cleaning the database
-        patientService.deletePatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+        patientService.delete(patientDTOExpected.getId());
 
     }
 
@@ -54,11 +54,42 @@ public class PatientServiceIT {
 
         patientService.saveNewPatient(patient);
 
-        patientService.deletePatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+        PatientDTO patientDTO = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+
+        patientService.delete(patientDTO.getId());
 
         PatientDTO patientDTOExpected = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
 
         assertNull(patientDTOExpected.getFirstName());
+
+    }
+
+    @Test
+    public void testToUpDatePatient(){
+
+        PatientDTO patient = new PatientDTO();
+        patient.setPhoneNumber("555555");
+        patient.setBirthDate(new Date());
+        patient.setGender("M");
+        patient.setAddress("testAddress");
+        patient.setLastName("TestLastName");
+        patient.setFirstName("TestFirstName");
+
+        patientService.saveNewPatient(patient);
+
+        PatientDTO patientDTOExpected = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+
+        patientDTOExpected.setPhoneNumber("77777777");
+
+        patientService.upDatePatient(patientDTOExpected);
+
+        PatientDTO patientDTOExpectedAfterUpdate = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+
+
+        assertEquals(patientDTOExpectedAfterUpdate.getPhoneNumber(), patientDTOExpected.getPhoneNumber());
+
+        //for cleaning the database
+        patientService.delete(patientDTOExpectedAfterUpdate.getId());
 
     }
 }

@@ -7,6 +7,7 @@ import lombok.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -44,6 +45,20 @@ public class Patient {
 
 
     public Patient() {
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Patient that = (Patient) o;
+        return id == that.id && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName)
+                && Objects.equals(birthDate, that.birthDate) && Objects.equals(gender, that.gender) && Objects.equals(address, that.address)
+                && Objects.equals(phoneNumber, that.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, birthDate, gender, address, phoneNumber);
     }
 }

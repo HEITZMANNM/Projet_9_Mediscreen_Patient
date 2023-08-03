@@ -56,6 +56,7 @@ public class PatientServiceTest {
 
         when(patientRepository.findAll()).thenReturn(listOfallPatients);
         when(patientRepository.findPatientById(anyInt())).thenReturn(patient);
+        when(patientRepository.findPatientByFirstNameAndLastName(anyString(), anyString())).thenReturn(patient);
     }
 
     @Test
@@ -69,7 +70,7 @@ public class PatientServiceTest {
     }
 
     @Test
-    public void testToGetPatientByFId(){
+    public void testToGetPatientById(){
 
         PatientDTO patient = patientService.getPatientById(0);
 
@@ -78,7 +79,14 @@ public class PatientServiceTest {
 
     }
 
+    @Test
+    public void testToGetPatientByFirstNameAndLastName(){
 
+        PatientDTO patient = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+
+        assertEquals(patient.getFirstName(), "TestFirstName");
+        assertEquals(patient.getAddress(), "testAddress");
+    }
 
 
 }

@@ -39,9 +39,9 @@ public class PatientController {
     }
 
     @DeleteMapping("/patient/delete")
-    public void deletePatient(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName)
+    public void deletePatient(@RequestParam(name = "id")int id)
     {
-        patientService.deletePatientByFirstNameAndLastName(firstName, lastName);
+        patientService.delete(id);
     }
 
     @PostMapping("/patient/upDate")

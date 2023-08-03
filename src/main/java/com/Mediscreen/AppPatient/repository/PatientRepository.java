@@ -8,8 +8,7 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface PatientRepository extends CrudRepository<Patient, Integer> {
-    @Transactional
-    void deletePatientByFirstNameAndLastName(String firstName, String lastName);
+
 
     Patient findPatientById(int id);
 

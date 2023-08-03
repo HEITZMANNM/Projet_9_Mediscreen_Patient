@@ -46,8 +46,8 @@ public class PatientControllerTest {
 
     @AfterEach
     public void cleanDB(){
-
-        patientService.deletePatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+PatientDTO patientDTO = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+        patientService.delete(patientDTO.getId());
     }
 
 
@@ -80,9 +80,11 @@ public class PatientControllerTest {
     }
 
     @Test
-    public void testToDeletePatientByFirstNameAndLastName() throws Exception {
+    public void testToDeletePatientById() throws Exception {
 
-        this.mockMvc.perform(delete("/patient/delete").param("firstName", "TestFirstName").param( "lastName", "TestLastName"))
+        PatientDTO patientDTO = patientService.getPatientByFirstNameAndLastName("TestFirstName", "TestLastName");
+
+        this.mockMvc.perform(delete("/patient/delete").param("id", String.valueOf(patientDTO.getId())))
                 .andExpect(status().isOk());
     }
 
@@ -103,7 +105,34 @@ public class PatientControllerTest {
                 .andExpect(status().isCreated());
 
 
-        patientService.deletePatientByFirstNameAndLastName("TestLastName2", "TestFirstName2");
+        PatientDTO patientDTO = patientService.getPatientByFirstNameAndLastName("TestFirstName2", "TestLastName2");
+        patientService.delete(patientDTO.getId());
+    }
+
+    @Test
+    public void testToUpDatePatient() throws Exception {
+
+        PatientDTO patient = new PatientDTO();
+        patient.setPhoneNumber("555444");
+        patient.setBirthDate(new Date());
+        patient.setGender("F");
+        patient.setAddress("testAddress2");
+        patient.setLastName("TestLastName2");
+        patient.setFirstName("TestFirstName2");
+
+        patientService.saveNewPatient(patient);
+
+
+        PatientDTO patientDTOExpected = patientService.getPatientByFirstNameAndLastName("TestFirstName2", "TestLastName2");
+        patientDTOExpected.setPhoneNumber("444333");
+
+        this.mockMvc.perform(post("/patient/upDate").content(asJsonString(patientDTOExpected))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+
+        patientService.delete(patientDTOExpected.getId());
     }
 
     public static String asJsonString(final Object obj) {
