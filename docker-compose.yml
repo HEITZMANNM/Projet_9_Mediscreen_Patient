@@ -1,0 +1,104 @@
+
+version: "3.1"
+services:
+
+
+  mysql:
+    image: mysql:8.0.33
+    restart: always
+    environment:
+      MYSQL_TCP_PORT: 3306
+      #      MYSQL_USER: root
+      MYSQL_DATABASE: Mediscreen
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbinit:/var/lib/mysql
+      - "./datainit.sql:/docker-entrypoint-initdb.d/1.sql"
+
+
+
+  AppPatient:
+    build:
+      context: ../AppPatient
+      dockerfile: Dockerfile
+    image: apppatient:latest
+    environment:
+      spring_datasource_url: jdbc:mysql://mysql:3306/Mediscreen?allowPublicKeyRetrieval=true&useSSL=false
+      spring_datasource_username: root
+      spring_datasource_password: 1234
+    depends_on:
+      - mysql
+    command: bash -c "sleep 20;"
+    ports:
+      - 8080:8080
+
+
+  mongodb:
+   image: mongodb/atlas:latest
+   environment:
+    MONGO_URL: mongodb://UserTest:0000@host1:27017,host2:27017,host3:27017/PatientAssessment
+    MONGODB_ATLAS_PUBLIC_API_KEY: 64d09d5e3f98e59cf9130686
+    MONGODB_ATLAS_PRIVATE_API_KEY: 64d09d5e3f98e59cf9130686
+    MONGODB_ATLAS_ORG_ID: 64c8d46b6d75e071fb44c22a
+    MONGODB_ATLAS_PROJECT_ID: 64d09d5e3f98e59cf9130686
+    MONGODB_CLUSTER_NAME: Cluster0
+    MONGODB_USERNAME:  UserTest
+    MONGODB_PASSWORD: 0000
+    MONGODB_DATABASE: PatientAssessment
+    MONGODB_COLLECTION: patientAssessment
+
+
+
+
+  AppAssessment:
+   build:
+    context: ../AppAssessment
+    dockerfile: Dockerfile
+   image: apppassessment:latest
+   environment:
+    MONGO_URL: mongodb://UserTest:0000@host1:27017,host2:27017,host3:27017/PatientAssessment
+    MONGODB_ATLAS_PUBLIC_API_KEY: 64d09d5e3f98e59cf9130686
+    MONGODB_ATLAS_PRIVATE_API_KEY: 64d09d5e3f98e59cf9130686
+    MONGODB_ATLAS_ORG_ID: 64c8d46b6d75e071fb44c22a
+    MONGODB_ATLAS_PROJECT_ID: 64d09d5e3f98e59cf9130686
+    MONGODB_CLUSTER_NAME: Cluster0
+    MONGODB_USERNAME:  UserTest
+    MONGODB_PASSWORD: 0000
+    MONGODB_DATABASE: PatientAssessment
+    MONGODB_COLLECTION: patientAssessment
+   depends_on:
+     - mongodb
+   ports:
+     - 8081:8081
+
+
+  AppReport:
+   build:
+    context: ../AppReport
+    dockerfile: Dockerfile
+   image: appreport:latest
+   ports:
+     - 8082:8082
+
+
+
+
+  AppPatientFront:
+   build:
+    context: ../AppPatientFront
+    dockerfile: Dockerfile
+   image: appfront:latest
+   ports:
+     - 4200:4200
+   command: bash -c "ng serve"
+
+#    bash -c "cd AppPatientFront"
+
+
+volumes:
+  dbinit:
+
+
+

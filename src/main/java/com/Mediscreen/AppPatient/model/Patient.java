@@ -6,6 +6,7 @@ import lombok.NonNull;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public class Patient {
     @NonNull
     private String address;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_Number")
     @NonNull
     private String phoneNumber;
 

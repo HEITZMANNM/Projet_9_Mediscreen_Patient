@@ -17,15 +17,29 @@ public class PatientController {
     PatientService patientService;
 
     @GetMapping("/patient/all")
-    public List<PatientDTO> getAllPatients()
+    public ResponseEntity getAllPatients()
     {
-        return patientService.getAllPatient();
+        List<PatientDTO> list = patientService.getAllPatient();
+        if(list.size()!= 0)
+        {
+            return new ResponseEntity<>(patientService.getAllPatient(), HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/patient/identity")
-    public PatientDTO getPatientByFirstNameAndLastName(@RequestParam(name = "id") int id)
+    public ResponseEntity getPatientById(@RequestParam(name = "id") int id)
     {
-        return patientService.getPatientById(id);
+       PatientDTO patientDTO= patientService.getPatientById(id);
+        if( patientDTO.getFirstName() != null)
+        {
+            return new ResponseEntity<>(patientDTO, HttpStatus.OK);
+        }
+       else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/patient/add")
@@ -35,13 +49,22 @@ public class PatientController {
         {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @DeleteMapping("/patient/delete")
-    public void deletePatient(@RequestParam(name = "id")int id)
+    public ResponseEntity deletePatient(@RequestParam(name = "id")int id)
     {
-        patientService.delete(id);
+        PatientDTO patientDTO = patientService.getPatientById(id);
+        if(patientDTO != null)
+        {
+            patientService.delete(id);
+           return new ResponseEntity<>(HttpStatus.OK);
+    }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PostMapping("/patient/upDate")
