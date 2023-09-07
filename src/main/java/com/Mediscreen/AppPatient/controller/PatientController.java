@@ -33,7 +33,7 @@ public class PatientController {
     public ResponseEntity getPatientById(@RequestParam(name = "id") int id)
     {
        PatientDTO patientDTO= patientService.getPatientById(id);
-        if( patientDTO.getFirstName() != null)
+        if( patientDTO.getId() !=0 && patientDTO.getFirstName() != null && !"".equals(patientDTO.getFirstName()))
         {
             return new ResponseEntity<>(patientDTO, HttpStatus.OK);
         }
